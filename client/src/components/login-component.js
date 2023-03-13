@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useHistory } from "react-router";
 import AuthService from "../services/auth.service";
 
-const LoginComponent = () => {
+const LoginComponent = (props) => {
+  let { currentUser, setCurrentUser } = props;
   const history = useHistory();
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
@@ -12,6 +13,22 @@ const LoginComponent = () => {
   };
   const handleChangePassword = (e) => {
     setPassword(e.target.value);
+  };
+  const handleLogin = () => {
+    AuthService.login(email, password)
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.token) {
+          localStorage.setItem("user", JSON.stringify(response.data));
+        }
+        window.alert("登入成功，傳送去profile頁面。");
+        setCurrentUser(AuthService.getCurrentUser());
+        history.push("/profile");
+      })
+      .catch((error) => {
+        console.log(error.response);
+        setMessage(error.response.data);
+      });
   };
 
   return (
@@ -43,7 +60,7 @@ const LoginComponent = () => {
         </div>
         <br />
         <div className="form-group">
-          <button className="btn btn-primary btn-block">
+          <button onClick={handleLogin} className="btn btn-primary btn-block">
             <span>Login</span>
           </button>
         </div>

@@ -18,6 +18,46 @@ router.get("/", (req, res) => {
     });
 });
 
+router.get("/findByName/:name", (req, res) => {
+  let { name } = req.params;
+  Course.find({ title: name })
+    .populate("instructor", ["username", "email"])
+    .then((course) => {
+      res.status(200).send(course);
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
+});
+
+router.get("/instructor/:_instructor_id", (req, res) => {
+  console.log("req.params:" + req.params);
+  let { _instructor_id } = req.params;
+  console.log("_instructor_id" + { _instructor_id });
+  Course.find({ instructor: _instructor_id })
+    .populate("instructor", ["username", "email"])
+    .then((data) => {
+      res.send(data);
+    })
+    .catch(() => {
+      res.status(500).send("Cannot get course data.");
+    });
+});
+
+router.get("/student/:_student_id", (req, res) => {
+  let { _student_id } = req.params;
+  console.log("req.params:" + req.params);
+  console.log("_student_id" + { _student_id });
+  Course.find({ students: _student_id })
+    .populate("instructor", ["username", "email"])
+    .then((courses) => {
+      res.send(courses);
+    })
+    .catch(() => {
+      res.status(500).send("Cannot get course data.");
+    });
+});
+
 router.get("/:_id", (req, res) => {
   console.log(req.params);
   let { _id } = req.params;
@@ -54,6 +94,20 @@ router.post("/", async (req, res) => {
     res.status(200).send("New course has been save.");
   } catch (error) {
     res.status(400).send("Cannot save course.");
+  }
+});
+
+router.post("/enroll/:_id", async (req, res) => {
+  let { _id } = req.params;
+  let { user_id } = req.body;
+  console.log(req.body, user_id);
+  try {
+    let course = await Course.findOne({ _id });
+    course.students.push(user_id);
+    await course.save();
+    res.send("Done Enrollment.");
+  } catch (err) {
+    res.send(err);
   }
 });
 
