@@ -18,7 +18,10 @@ function App() {
       <NavComponent currentUser={currentUser} setCurrentUser={setCurrentUser} />
       <Switch>
         <Route path="/" exact>
-          <HomeComponent />
+          <HomeComponent
+            currentUser={currentUser}
+            setCurrentUser={setCurrentUser}
+          />
         </Route>
         <Route path="/register" exact>
           <RegisterComponent />

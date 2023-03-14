@@ -21,55 +21,56 @@ const NavComponent = (props) => {
               <ul className="navbar-nav">
                 <li className="nav-item">
                   <Link className="nav-link active" to="/">
-                    Home
+                    主頁
                   </Link>
                 </li>
                 {!currentUser && (
                   <li className="nav-item">
                     <Link className="nav-link" to="/register">
-                      Register
+                      註冊
                     </Link>
                   </li>
                 )}
                 {!currentUser && (
                   <li className="nav-item">
                     <Link className="nav-link" to="/login">
-                      Login
+                      登入
                     </Link>
                   </li>
                 )}
                 {currentUser && (
                   <li className="nav-item">
                     <Link className="nav-link" to="/profile">
-                      Profile
+                      個人簡介
                     </Link>
                   </li>
                 )}
-                {currentUser && (
-                  <li className="nav-item">
-                    <Link onClick={handleLogout} className="nav-link" to="#">
-                      Logout
-                    </Link>
-                  </li>
-                )}
+
                 {currentUser && (
                   <li className="nav-item">
                     <Link className="nav-link" to="/course">
-                      Courses
+                      課程
                     </Link>
                   </li>
                 )}
                 {currentUser && currentUser.user.role == "教師" && (
                   <li className="nav-item">
                     <Link className="nav-link" to="/postCourse">
-                      Post Courses
+                      新增課程
                     </Link>
                   </li>
                 )}
                 {currentUser && currentUser.user.role == "學生" && (
                   <li className="nav-item">
                     <Link className="nav-link" to="/enroll">
-                      Enroll
+                      登記課程
+                    </Link>
+                  </li>
+                )}
+                {currentUser && (
+                  <li className="nav-item">
+                    <Link onClick={handleLogout} className="nav-link" to="#">
+                      登出
                     </Link>
                   </li>
                 )}
